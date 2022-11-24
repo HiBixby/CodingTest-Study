@@ -26,3 +26,7 @@ drawing_star(N, N-1, 0) #삼각형의 높이와 삼각형 맨 위 꼭지점 좌�
 for i in star:
     print(''.join(i))
 
+#에러/오류 사항
+#RecursionError: maximum recursion depth exceeded in comparison
+
+# PyPy3로 안돌아감 -> 메모리 초과됨/Python38로 해결

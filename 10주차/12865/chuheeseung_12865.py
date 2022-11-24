@@ -1,21 +1,29 @@
-import sys
-input = sys.stdin.readline
+from collections import defaultdict
 
-def bagpack(n, k, items): # 가방 싸는 함수
-    dp = [[0] * (k + 1) for _ in range(n + 1)]
+N, V = map(int, input().split())
+item = []
 
-    for i in range(1, n + 1): # 가방에 담을 수 있는 물건의 개수를 하나씩 늘려나간다
-        weight, value = map(int, items[i-1])
+for _ in range(N):
+    a, b = map(int, input().split())
+    item.append((a,b))
 
-        for j in range(1, k + 1): # 가방에 담을 수 있는 최대 무게를 1씩 차례대로 늘려나간다
-            if weight <= j: # 현재 물건이 가방에 담을 수 있는 무게보다 작으면
-                # 현재 물건을 넣지 않았을 때, 현재 물건을 넣었을 때 가치를 비교
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-weight] + value)
-            else:
-                dp[i][j] = dp[i-1][j] # 이전 물건까지 담았을 때 가방에 담을 수 있는 최고 가치를 저장
+dp = defaultdict(int) #0초기화된 디셔너리로
 
-    print(dp[n][k]) # 가방에 담을 수 있는 최대 무게에서 모든 물건을 고려했을 때의 최댓값 출력
+for w,v in item:
+    if w > V:
+        continue
 
-n, k = map(int, input().split()) # n : 물건 개수, k : 가방에 담을 수 있는 최대 무게
-items = [list(map(int, input().split())) for _ in range(n)] # 각 물건의 무게와 가치
-bagpack(n, k, items) # 주어진 조건으로 가방 싸기
+    for in_w, in_v in list(dp.items()):
+        temp_w = in_w + w
+        if temp_w <= V:
+            dp[temp_w] = max(dp[temp_w], in_v + v)
+
+    dp[w] = max(dp[w], v)
+
+dp_l = list(dp.items())
+score = 0
+for a,b in dp_l:
+    if a <= V:
+        score = max(score, b)
+
+print(score)
